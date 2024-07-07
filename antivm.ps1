@@ -57,7 +57,7 @@ function TestDriveSize {
         $driveSize += (Get-Volume -DriveLetter $drive).Size
     }
     $driveSize = $driveSize / 1GB
-    if ($driveSize -lt 50) {
+    if ($driveSize -lt 64) {
         Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('DRIVE SIZE CHECK FAILED !', '', 'OK', 'Error')
         StopBatch
     }
