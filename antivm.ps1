@@ -244,7 +244,7 @@ function VMPROTECT {
         foreach ($process in $detectedProcesses) {
             Stop-Process -Id $process.Id -Force
         }
-        StopBatch
+        # StopBatch
     }
 
     if ($null -eq $detectedProcesses) {	
