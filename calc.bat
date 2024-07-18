@@ -1,1 +1,1 @@
-start /min calc.exe
+Start-Process calc.exe
