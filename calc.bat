@@ -1,1 +1,1 @@
-Start-Process calc.exe
+calc.exe
