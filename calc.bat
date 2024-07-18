@@ -1,1 +1,1 @@
-start /min "" calc.exe
+start /min calc.exe
