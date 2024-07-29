@@ -1,6 +1,6 @@
 function ShowError {
     param([string]$errorName)
-    Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show("Sorry, this application cannot run under a Virtual Machine! $errorName", '', 'OK', 'Error') | Out-Null
+    Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show("Sorry, this application cannot run under a Virtual Machine!", $errorName, 'OK', 'Error') | Out-Null
 }
 
 function StopBatch {
@@ -23,12 +23,12 @@ function Internet-Check {
     try {
         $pingResult = Test-Connection -ComputerName google.com -Count 1 -ErrorAction Stop
         if ($pingResult.StatusCode -ne 0) {
-            Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Internet DETECTED !', '', 'OK', 'Error')
+            ShowError'Internet DETECTED !'
             StopBatch
         }
     }
     catch {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Internet DETECTED !', '', 'OK', 'Error')
+        ShowError 'Internet DETECTED !'
         StopBatch
     }
 }
@@ -36,7 +36,7 @@ function Internet-Check {
 function ProcessCountCheck {
     $processes = Get-Process | Measure-Object | Select-Object -ExpandProperty Count
     if ($processes -lt 50) {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('PROCESS COUNT DETECTED !', '', 'OK', 'Error')
+        ShowError 'PROCESS COUNT DETECTED !'
         StopBatch
     }
 }
@@ -45,7 +45,7 @@ function RecentFileActivity {
     $file_Dir = "$ENV:APPDATA/microsoft/windows/recent"
     $file = Get-ChildItem -Path $file_Dir -Recurse
     if ($file.Count -lt 20) {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('RECENT FILE ACTIVITY DETECTED !', '', 'OK', 'Error')
+        ShowError 'RECENT FILE ACTIVITY DETECTED !'
         StopBatch
     }
 }
@@ -58,7 +58,7 @@ function TestDriveSize {
     }
     $driveSize = $driveSize / 1GB
     if ($driveSize -lt 64) {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('DRIVE SIZE DETECTED !', '', 'OK', 'Error')
+        ShowError 'DRIVE SIZE DETECTED !'
         StopBatch
     }
 
@@ -70,7 +70,7 @@ function CheckForKVM {
 
     foreach ($driver in $badDriversList) {
         if (Get-ChildItem -Path (Join-Path -Path $system32Folder -ChildPath $driver) -ErrorAction SilentlyContinue) {
-            Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('KVM DETECTED !', '', 'OK', 'Error')
+            ShowError 'KVM DETECTED !'
             StopBatch
         }
     }
@@ -87,7 +87,7 @@ public class User32 {
 "@
 
     if ([User32]::GetSystemMetrics(0) -lt 800 -or [User32]::GetSystemMetrics(1) -lt 600) {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('SCREEN DETECTED !', '', 'OK', 'Error')
+        ShowError 'SCREEN DETECTED !'
         StopBatch 
     }
 }
@@ -99,16 +99,14 @@ function VMArtifactsDetect {
     $file_Dir = Join-Path -Path $env:SystemRoot -ChildPath "System32"
     foreach ($file in Get-ChildItem -Path $file_Dir -ErrorAction Stop) {
         if ($badFileNames -contains $file.Name) {
-            Add-Type -AssemblyName System.Windows.Forms; 
-            [System.Windows.Forms.MessageBox]::Show('VM SYS FILE DETECTED !', '', 'OK', 'Error')
+            ShowError 'VM SYS FILE DETECTED !'
             StopBatch  
         }
     }
 
     foreach ($dir in $badDirs) {
         if (Test-Path -Path $dir) {
-            Add-Type -AssemblyName System.Windows.Forms; 
-            [System.Windows.Forms.MessageBox]::Show('VM DIR DETECTED !', '', 'OK', 'Error')
+            ShowError 'VM DIR DETECTED !'
             StopBatch  
         }
     }
@@ -117,7 +115,7 @@ function VMArtifactsDetect {
 function CheckUptime {
     $uptime = [math]::Round([System.Diagnostics.Stopwatch]::GetTimestamp() / [System.Diagnostics.Stopwatch]::Frequency * 1000 / 1000)
     if ($uptime -lt 1200) {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('UPTIME DETECTED !', '', 'OK', 'Error')
+        ShowError'UPTIME DETECTED !'
         StopBatch  
     }
 }
@@ -126,7 +124,7 @@ function GraphicsCardCheck {
     $gpuOutput = wmic path win32_VideoController get name 2>&1
 
     if ($gpuOutput -match "vmware" -or $gpuOutput -match "virtualbox") {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('GPU DETECTED !', '', 'OK', 'Error')
+        ShowError 'GPU DETECTED !'
         StopBatch  
     }
 }
@@ -134,7 +132,7 @@ function GraphicsCardCheck {
 function RamCheck {
     $ram = (Get-WmiObject -Class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).Sum / 1GB
     if ($ram -lt 2) {
-        Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('RAM DETECTED !', '', 'OK', 'Error')
+        ShowError 'RAM DETECTED !'
         StopBatch  
     }
 }
@@ -143,7 +141,7 @@ function PluggedIn {
         $usbCheck = reg query "HKLM\SYSTEM\ControlSet001\Enum\USBSTOR" 2>&1
 
         if ($usbCheck -match "HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Enum\\USBSTOR") {
-            Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('USB DETECTED !', '', 'OK', 'Error')
+            ShowError 'USB DETECTED !'
             StopBatch  
         }
 }
