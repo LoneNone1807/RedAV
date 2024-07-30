@@ -119,7 +119,7 @@ function GraphicsCardCheck {
 
 function RamCheck {
     $ram = (Get-WmiObject -Class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).Sum / 1GB
-    if ($ram -lt 2) {
+    if ($ram -lt 4) {
         ShowError 'RAM DETECTED !'
         StopBatch  
     }
