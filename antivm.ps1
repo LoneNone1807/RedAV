@@ -45,7 +45,7 @@ function TestDriveSize {
         $driveSize += (Get-Volume -DriveLetter $drive).Size
     }
     $driveSize = $driveSize / 1GB
-    if ($driveSize -lt 64) {
+    if ($driveSize -lt 80) {
         ShowError 'DRIVE SIZE DETECTED !'
         StopBatch
     }
