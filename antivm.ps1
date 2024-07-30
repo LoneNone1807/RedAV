@@ -23,7 +23,7 @@ function Internet-Check {
     try {
         $pingResult = Test-Connection -ComputerName google.com -Count 1 -ErrorAction Stop
         if ($pingResult.StatusCode -ne 0) {
-            ShowError'Internet DETECTED !'
+            ShowError 'Internet DETECTED !'
             StopBatch
         }
     }
